@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <title>音楽診断サイト M-diag (エムディアグ) | あなたにおすすめの音楽を簡単診断</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Elsie+Swash+Caps&family=Fredericka+the+Great&family=Open+Sans:wght@300&display=swap"
+        rel="stylesheet">
+    <!-- href="{{ url_for('static', filename='css/style.css') }}" -->
+    <!-- href="css/style.css" -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>M-diag</h1>
+    </header>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+                <p class="top">あなたにおすすめの音楽は・・・</p>
+                <p style="text-align:center">
+                    <img src="{{image}}">
+                </p>
+                <p class="music">
+                    <曲名><br>{{music}}<br>
+                        <アーティスト名><br>{{artist}}<br>
+                </p>
+                <p class="below">
+                    {{music}}は<a href="{{url}}" target="_blank" rel="noopener noreferrer">こちら</a>
+                </p>
+
+                {% if audio == 'なし' %}
+                <p>試聴はできません</p>
+                {% else %}
+                <p>試聴は<a href="{{audio}}" target="_blank" rel="noopener noreferrer">こちら</a>からできます</p>
+                {% endif %}
+                <p class="table">
+                    <あなたの解答>
+                        <table border="5" bordercolor="red">
+                            <tr>
+                                <th>質問</th>
+                                <th>解答</th>
+                            </tr>
+                            <tr>
+                                <td>1.踊りたくなる音楽かどうか</td>
+                                <td>{{ans[0]}}</td>
+                            </tr>
+                            <tr>
+                                <td>2.アコースティック感</td>
+                                <td>{{ans[1]}}</td>
+                            </tr>
+                            <tr>
+                                <td>3.エネルギッシュさ</td>
+                                <td>{{ans[2]}}</td>
+                            </tr>
+                            <tr>
+                                <td>4.音量・音圧</td>
+                                <td>{{ans[3]}}</td>
+                            </tr>
+                            <tr>
+                                <td>5.テンポ</td>
+                                <td>{{ans[4]}}</td>
+                            </tr>
+                            <tr>
+                                <td>6.悲観的な音楽と楽観的な音楽</td>
+                                <td>{{ans[5]}}</td>
+                            </tr>
+                        </table>
+                </p>
+                <button onclick="location.href='/'" class="btn btn-success" id="continue">やり直す</button>
+                <form action="/cluster" method="post">
+                    <div id="cluster">
+                        <input id="class" type="text" name="genre" value="{{genre}}" readonly>
+                        <input id="class2" type="text" name="name" value="{{music}}" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">類似した曲を検索</button>
+                </form>
+                ＊レーダーチャートの説明は<a href="https://drive.google.com/file/d/1DuEy3GIrTtettqpiwSvGKgFM-OuPEZVo/view?usp=sharing" target="_blank" rel="noopener noreferrer">こちら</a>を参照
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chart-container">
+            <div class="col-sm-9 offset-sm-3">
+                <button id="display" class="btn btn-danger btn-block">レーダーチャートの表示</button>
+            </div>
+            <canvas id="myRadarChart"></canvas>
+            <div class="col-sm-9 offset-sm-3">
+                <button id="rank" class="btn btn-warning btn-block">ランキングの表示</button>
+            </div>
+            <canvas id="myRadarRankChart"></canvas>
+
+            <div class="col-sm-9 offset-sm-3">
+                <button id="change_chart" class="btn btn-info btn-block">レーダーチャートの変更</button>
+            </div>
+            <div class="change">
+                <form action="/chart" method="post">
+                    <div>
+                        <label for="range-example">
+                            ・danceability=<span id="eva" class="eva"></span>
+                        </label>
+                        <br>
+                        0 <input type="range" name="range-1" id="range" min="0" max="1" step="0.001"
+                            value="{{values[0]}}" /> 1
+                    </div>
+                    <div>
+                        <label for="range-example">
+                            ・acousticness=<span id="eva2" class="eva2"></span>
+                        </label>
+                        <br>
+                        0 <input type="range" name="range-2" id="range2" min="0" max="1" step="0.001"
+                            value="{{values[1]}}" /> 1
+                    </div>
+                    <div>
+                        <label for="range-example">
+                            ・energy=<span id="eva3" class="eva3"></span>
+                        </label>
+                        <br>
+                        0 <input type="range" name="range-3" id="range3" min="0" max="1" step="0.001"
+                            value="{{values[2]}}" /> 1
+                    </div>
+                    <div>
+                        <label for="range-example">
+                            ・loudness=<span id="eva4" class="eva4"></span>
+                        </label>
+                        <br>
+                        0 <input type="range" name="range-4" id="range4" min="0" max="1" step="0.001"
+                            value="{{values[3]}}" /> 1
+                    </div>
+                    <div>
+                        <label for="range-example">
+                            ・tempo=<span id="eva5" class="eva5"></span>
+                        </label>
+                        <br>
+                        0 <input type="range" name="range-5" id="range5" min="0" max="1" step="0.001"
+                            value="{{values[4]}}" /> 1
+                    </div>
+                    <div>
+                        <label for="range-example">
+                            ・valence=<span id="eva6" class="eva6"></span>
+                        </label>
+                        <br>
+                        0 <input type="range" name="range-6" id="range6" min="0" max="1" step="0.001"
+                            value="{{values[5]}}" /> 1
+                    </div>
+                    <div>
+                        <input id="genre" type="text" name="genre" value="{{genre}}" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">これに近い曲を探す</button>
+                </form>
+            </div>
+            <canvas id="convert"></canvas>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="container">
+        <footer>
+            <p>&copy; たーくん</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js">
+    </script>
+    <script>
+        document.getElementById('display').addEventListener('click', function () {
+            document.getElementById('rank').style.display = 'inline'
+            var ctx = document.getElementById("myRadarChart");
+            var myRadarChart = new Chart(ctx, {
+                //グラフの種類
+                type: 'radar',
+                //データの設定
+                data: {
+                    labels: ['danceability', 'acousticness', 'energy', 'loudness', 'tempo', 'valence'],
+                    datasets: [{
+                        label: '「{{music}}」のレーダーチャート',
+                        //グラフのデータ
+                        data: ['{{values[0]}}', '{{values[1]}}', '{{values[2]}}', '{{values[3]}}', '{{values[4]}}', '{{values[5]}}'],
+                        // データライン
+                        borderColor: 'red',
+                    }],
+                },
+                //オプションの設定
+                options: {
+                    scales: {
+                        r: {
+                            //グラフの最小値・最大値
+                            min: 0,
+                            max: 1,
+                            stepSize: 0.1,
+                            //背景色
+                            backgroundColor: 'snow',
+                            //グリッドライン
+                            grid: {
+                                color: 'pink',
+                            },
+                            //アングルライン
+                            angleLines: {
+                                color: 'green',
+                            },
+                            //各項目のラベル
+                            pointLabels: {
+                                color: 'blue',
+                            },
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById('rank').addEventListener('click', function () {
+            var size = {{ size| tojson}};
+            var ctx = document.getElementById("myRadarRankChart");
+            var myRadarRankChart = new Chart(ctx, {
+            //グラフの種類
+            type: 'radar',
+            //データの設定
+            data: {
+                labels: ['danceability', 'acousticness', 'energy', 'loudness', 'tempo', 'valence'],
+                datasets: [{
+                    label: '「{{music}}」のランキング({{size}}曲中)',
+                    //グラフのデータ
+                    data: ['{{rank[0]}}', '{{rank[1]}}', '{{rank[2]}}', '{{rank[3]}}', '{{rank[4]}}', '{{rank[5]}}'],
+                    // データライン
+                    borderColor: 'red',
+                }],
+            },
+            //オプションの設定
+            options: {
+                scales: {
+                    r: {
+                        //グラフの最小値・最大値
+                        min: 1,
+                        max: size,
+                        //背景色
+                        backgroundColor: 'snow',
+                        //グリッドライン
+                        grid: {
+                            color: 'pink',
+                        },
+                        //アングルライン
+                        angleLines: {
+                            color: 'green',
+                        },
+                        //各項目のラベル
+                        pointLabels: {
+                            color: 'blue',
+                        },
+                    },
+                },
+            },
+        });
+        });
+    </script>
+
+    <script>
+        document.getElementById('change_chart').addEventListener('click', function () {
+            var r1 = document.getElementById("range");
+            var r2 = document.getElementById("range2");
+            var r3 = document.getElementById("range3");
+            var r4 = document.getElementById("range4");
+            var r5 = document.getElementById("range5");
+            var r6 = document.getElementById("range6");
+            var ctx = document.getElementById("convert");
+            var change_chart = new Chart(ctx, {
+                //グラフの種類
+                type: 'radar',
+                //データの設定
+                data: {
+                    labels: ['danceability', 'acousticness', 'energy', 'loudness', 'tempo', 'valence'],
+                    datasets: [{
+                        label: '値を変更した時のレーダーチャート',
+                        //グラフのデータ
+                        data: [r1.value, r2.value, r3.value, r4.value, r5.value, r6.value],
+                        // データライン
+                        borderColor: 'red',
+                    }],
+                },
+                //オプションの設定
+                options: {
+                    scales: {
+                        r: {
+                            //グラフの最小値・最大値
+                            min: 0,
+                            max: 1,
+                            //背景色
+                            backgroundColor: 'snow',
+                            //グリッドライン
+                            grid: {
+                                color: 'pink',
+                            },
+                            //アングルライン
+                            angleLines: {
+                                color: 'green',
+                            },
+                            //各項目のラベル
+                            pointLabels: {
+                                color: 'blue',
+                            },
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById('rank').style.display = 'none';
+        document.getElementById('genre').style.display = 'none';
+        document.getElementById('cluster').style.display = 'none';
+    </script>
+
+    <script>
+        window.onload = function () {
+            // 選択した際のイベント取得
+            var hoge = document.getElementById("range");
+            hoge.addEventListener('change', (e) => {
+                document.getElementsByClassName('eva')[0].textContent = hoge.value;
+            });
+
+            var hoge2 = document.getElementById("range2");
+            hoge2.addEventListener('change', (e) => {
+                document.getElementsByClassName('eva2')[0].textContent = hoge2.value;
+            });
+
+            var hoge3 = document.getElementById("range3");
+            hoge3.addEventListener('change', (e) => {
+                document.getElementsByClassName('eva3')[0].textContent = hoge3.value;
+            });
+
+            var hoge4 = document.getElementById("range4");
+            hoge4.addEventListener('change', (e) => {
+                document.getElementsByClassName('eva4')[0].textContent = hoge4.value;
+            });
+
+            var hoge5 = document.getElementById("range5");
+            hoge5.addEventListener('change', (e) => {
+                document.getElementsByClassName('eva5')[0].textContent = hoge5.value;
+            });
+
+            var hoge6 = document.getElementById("range6");
+            hoge6.addEventListener('change', (e) => {
+                document.getElementsByClassName('eva6')[0].textContent = hoge6.value;
+            });
+        }
+    </script>
+
+    <script>
+        var e1 = document.getElementById('eva');
+        var e2 = document.getElementById('eva2');
+        var e3 = document.getElementById('eva3');
+        var e4 = document.getElementById('eva4');
+        var e5 = document.getElementById('eva5');
+        var e6 = document.getElementById('eva6');
+        e1.innerText = {{ values[0] }}.toPrecision(3);
+        e2.innerText = {{ values[1] }}.toPrecision(3);
+        e3.innerText = {{ values[2] }}.toPrecision(3);
+        e4.innerText = {{ values[3] }}.toPrecision(3);
+        e5.innerText = {{ values[4] }}.toPrecision(3);
+        e6.innerText = {{ values[5] }}.toPrecision(3);
+    </script>
+</body>
+
+</html>
