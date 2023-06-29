@@ -11,29 +11,27 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Elsie+Swash+Caps&family=Fredericka+the+Great&family=Open+Sans:wght@300&display=swap"
         rel="stylesheet">
-    <!-- href="{{ url_for('static', filename='css/style.css') }}" -->
-    <!-- href="css/style.css" -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="./favicon.ico">
 </head>
 
 <body>
     <header>
         <h1>M-diag</h1>
     </header>
-    </div>
 
     <div class="container">
-        <form action="/result" method="POST" autocomplete="off" class="row">
+        <form action="./result.html" method="GET">
             <div class="col-sm-8 offset-sm-2">
-                <p class="top">あなたにおすすめの音楽を簡単な質問で即座に診断します。<br></p>
+                <p class="top">あなたにおすすめの音楽を簡単な質問で即座に診断します。</p>
                 <p>始めに音楽のジャンルを選択しましょう。</p>
                 <div class="form-group">
-                    <label for="name">ジャンル</label>
+                    <label for="genre">ジャンル</label>
                     <select id="genre" name="genre" class="form-control" required>
                         <option value="">選択してください</option>
                         <option value="1">洋楽</option>
                         <option value="2">邦楽</option>
-                        <option value="3">ボカロ</option>
+                        <option value="3">ボカロ(現在選択できません)</option>
                     </select>
                 </div>
                 <p>次に、以下の質問に回答しましょう。あなた好みの音楽を診断します。</p>

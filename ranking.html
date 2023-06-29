@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+
+    <title>音楽診断サイト M-diag (エムディアグ) | あなたにおすすめの音楽を簡単診断</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Elsie+Swash+Caps&family=Fredericka+the+Great&family=Open+Sans:wght@300&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
+        </script>
+    <link rel="icon" href="./favicon.ico">
+
+    <script>
+        var music_data;
+
+        // 質問結果を取得&送信
+        $(document).ready(function () {
+            // ページ読み込み時に実行したい処理
+            var apiurl = "https://fz1p4ysh29.execute-api.ap-northeast-1.amazonaws.com/MusicAPI/m-diag_ranking";
+
+            function test() {
+                return $.ajax({
+                    url: apiurl,
+                    type: 'POST',
+                    dataType: 'json',
+                    async: false //同期処理する
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert('読み込みエラーです。管理者にお問い合わせください。');
+                })
+            }
+            test().done(function (response) {
+                //alert('分析完了');
+                const status = response.statusCode
+                if (status == 500) {
+                    alert('読み込みエラーです。');
+                }
+                music_data = response.body;
+            })
+
+            //htmlの各場所にデータを挿入する
+            console.log(music_data);
+            var rank1 = music_data.rank1;
+            var rank2 = music_data.rank2;
+            var rank3 = music_data.rank3;
+
+            let name_g1 = document.getElementById('name-g1');
+            name_g1.innerHTML = `<a href=${rank1.global.url} target="_blank" rel="noopener noreferrer">${rank1.global.name}</a>`;
+            let artist_g1 = document.getElementById('artist-g1');
+            artist_g1.innerHTML = rank1.global.artist;
+            let audio_g1 = document.getElementById('audio-g1');
+            if (rank1.global.audio == 'なし') {audio_g1.innerHTML = '試聴不可'}
+            else {audio_g1.innerHTML = `<a href=${rank1.global.audio} target="_blank" rel="noopener noreferrer">試聴可能</a>`}
+            let iine_g1 = document.getElementById('iine-g1');
+            iine_g1.innerHTML = rank1.global.iine
+
+            let name_g2 = document.getElementById('name-g2');
+            name_g2.innerHTML = `<a href=${rank2.global.url} target="_blank" rel="noopener noreferrer">${rank2.global.name}</a>`;
+            let artist_g2 = document.getElementById('artist-g2');
+            artist_g2.innerHTML = rank2.global.artist;
+            let audio_g2 = document.getElementById('audio-g2');
+            if (rank2.global.audio == 'なし') {audio_g2.innerHTML = '試聴不可'}
+            else {audio_g2.innerHTML = `<a href=${rank2.global.audio} target="_blank" rel="noopener noreferrer">試聴可能</a>`}
+            let iine_g2 = document.getElementById('iine-g2');
+            iine_g2.innerHTML = rank2.global.iine
+
+            let name_g3 = document.getElementById('name-g3');
+            name_g3.innerHTML = `<a href=${rank3.global.url} target="_blank" rel="noopener noreferrer">${rank3.global.name}</a>`;
+            let artist_g3 = document.getElementById('artist-g3');
+            artist_g3.innerHTML = rank3.global.artist;
+            let audio_g3 = document.getElementById('audio-g3');
+            if (rank3.global.audio == 'なし') {audio_g3.innerHTML = '試聴不可'}
+            else {audio_g3.innerHTML = `<a href=${rank3.global.audio} target="_blank" rel="noopener noreferrer">試聴可能</a>`}
+            let iine_g3 = document.getElementById('iine-g3');
+            iine_g3.innerHTML = rank3.global.iine
+
+            let name_j1 = document.getElementById('name-j1');
+            name_j1.innerHTML = `<a href=${rank1.japan.url} target="_blank" rel="noopener noreferrer">${rank1.japan.name}</a>`;
+            let artist_j1 = document.getElementById('artist-j1');
+            artist_j1.innerHTML = rank1.japan.artist;
+            let audio_j1 = document.getElementById('audio-j1');
+            if (rank1.japan.audio == 'なし') {audio_j1.innerHTML = '試聴不可'}
+            else {audio_j1.innerHTML = `<a href=${rank1.japan.audio} target="_blank" rel="noopener noreferrer">試聴可能</a>`}
+            let iine_j1 = document.getElementById('iine-j1');
+            iine_j1.innerHTML = rank1.japan.iine
+
+            let name_j2 = document.getElementById('name-j2');
+            name_j2.innerHTML = `<a href=${rank2.japan.url} target="_blank" rel="noopener noreferrer">${rank2.japan.name}</a>`;
+            let artist_j2 = document.getElementById('artist-j2');
+            artist_j2.innerHTML = rank2.japan.artist;
+            let audio_j2 = document.getElementById('audio-j2');
+            if (rank2.japan.audio == 'なし') {audio_j2.innerHTML = '試聴不可'}
+            else {audio_j2.innerHTML = `<a href=${rank2.japan.audio} target="_blank" rel="noopener noreferrer">試聴可能</a>`}
+            let iine_j2 = document.getElementById('iine-j2');
+            iine_j2.innerHTML = rank2.japan.iine
+
+            let name_j3 = document.getElementById('name-j3');
+            name_j3.innerHTML = `<a href=${rank3.japan.url} target="_blank" rel="noopener noreferrer">${rank3.japan.name}</a>`;
+            let artist_j3 = document.getElementById('artist-j3');
+            artist_j3.innerHTML = rank3.japan.artist;
+            let audio_j3 = document.getElementById('audio-j3');
+            if (rank3.japan.audio == 'なし') {audio_j3.innerHTML = '試聴不可'}
+            else {audio_j3.innerHTML = `<a href=${rank3.japan.audio} target="_blank" rel="noopener noreferrer">試聴可能</a>`}
+            let iine_j3 = document.getElementById('iine-j3');
+            iine_j3.innerHTML = rank3.japan.iine
+        });
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <h1>M-diag</h1>
+        </header>
+
+        <div class="container">
+            <div class="row2">
+                <div class="col-sm-8 offset-sm-2">
+                    <p class="top">いいね数ランキング!!</p>
+                    <table border="5" bordercolor="red" style="margin: auto;" id="ranking">
+                        <tr>
+                            <th>洋楽top3</th>
+                            <th>曲名</th>
+                            <th>アーティスト名</th>
+                            <th>試聴</th>
+                            <th>いいね数</th>
+                        </tr>
+                        <tr>
+                            <td>第1位</td>
+                            <td id="name-g1"></td>
+                            <td id="artist-g1"></td>
+                            <td id="audio-g1"></td>
+                            <td id="iine-g1"></td>
+                        </tr>
+                        <tr>
+                            <td>第2位</td>
+                            <td id="name-g2"></td>
+                            <td id="artist-g2"></td>
+                            <td id="audio-g2"></td>
+                            <td id="iine-g2"></td>
+                        </tr>
+                        <tr>
+                            <td>第3位</td>
+                            <td id="name-g3"></td>
+                            <td id="artist-g3"></td>
+                            <td id="audio-g3"></td>
+                            <td id="iine-g3"></td>
+                        </tr>
+                    </table>
+                    <p></p>
+                    <table border="5" bordercolor="red" style="margin: auto;" id="ranking">
+                        <tr>
+                            <th>邦楽top3</th>
+                            <th>曲名</th>
+                            <th>アーティスト名</th>
+                            <th>試聴</th>
+                            <th>いいね数</th>
+                        </tr>
+                        <tr>
+                            <td>第1位</td>
+                            <td id="name-j1"></td>
+                            <td id="artist-j1"></td>
+                            <td id="audio-j1"></td>
+                            <td id="iine-j1"></td>
+                        </tr>
+                        <tr>
+                            <td>第2位</td>
+                            <td id="name-j2"></td>
+                            <td id="artist-j2"></td>
+                            <td id="audio-j2"></td>
+                            <td id="iine-j2"></td>
+                        </tr>
+                        <tr>
+                            <td>第3位</td>
+                            <td id="name-j3"></td>
+                            <td id="artist-j3"></td>
+                            <td id="audio-j3"></td>
+                            <td id="iine-j3"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8 offset-sm-2">
+            <button onclick="location.href='./index.html'" class="btn btn-success btn-block" style="margin-top: 10px;">やり直す</button>
+        </div>
+
+        <hr>
+
+        <div class="container">
+            <footer>
+                <p>&copy; たーくん</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        jQuery(function () {
+            var Wheight = jQuery(window).height();
+            jQuery('body').css("height", Wheight);
+            jQuery('.wrap').prepend('<div class="loading"><div class="content"><img src="https://7-create.com/matl/loading_w/loading.gif" alt=""></div></div>');
+            setTimeout(function () {
+                jQuery('.loading').fadeOut(500);
+            }, 1500);
+        });    
+    </script>
+</body>
+
+</html>
