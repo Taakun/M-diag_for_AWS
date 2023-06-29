@@ -72,7 +72,7 @@ https://open.spotify.com/playlist/7phdTgX9Bq19f1nqutnc6o?si=dc782acaab1c4ae8
 1. spotifyのapiの取得には、以下を参考  
 https://knowledge.insight-lab.co.jp/sisense/information/spotify_music_data_1
 
-2. AWSのLambdaを用いたdynamoDBの処理方法について、Lambdaをwebアプリで実行する方法については、以下を参考
+2. AWSのLambdaを用いたdynamoDBの処理方法について、Lambdaをwebアプリで実行する方法については、以下を参考  
 [AWS API GatewayとLambdaでDynamoDB操作](https://business.ntt-east.co.jp/content/cloudsolution/column-try-20.html)  
 [サーバレスな静的ウェブサイトをイチから作ってみた。その①](https://blog.denet.co.jp/serverless_web1/)  
-[【AWS】簡単なサーバーレスアプリケーションを構築する](https://zenn.dev/soshimiyamoto/articles/dcb51cbd5725e0)  
+[【AWS】簡単なサーバーレスアプリケーションを構築する](https://zenn.dev/soshimiyamoto/articles/dcb51cbd5725e0)
