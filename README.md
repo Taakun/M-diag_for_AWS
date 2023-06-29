@@ -3,7 +3,7 @@
 
 ## 改良点
 バックエンドの処理において、flaskでの処理をやめて、データベースを追加し、AWS Lambdaで処理を行うようにしました。  
-いいね機能を追加しました。
+いいね機能を追加しました。  
 いいね数のランキングを表示する機能を追加しました。
 
 ## 作品紹介
@@ -12,36 +12,45 @@
 <img src="https://user-images.githubusercontent.com/106829693/197347769-9f5c0dfa-d972-4c8a-9009-934e92beb7a6.png" width="500">  
 「M-diag」は[こちら](http://m-diag.com.s3-website-ap-northeast-1.amazonaws.com/index.html)  
 
+## 作品の各種機能の説明
+・質問による音楽診断  
+6つの質問から、最も適した音楽を診断します。  
+・類似した楽曲を診断する機能  
+事前にクラスタリングした楽曲データから、同じクラスの楽曲をおすすめします。  
+・特定の数値に最も近い楽曲を診断する機能  
+指定した数値に最も近い楽曲をおすすめします。  
+・いいね数ランキング  
+いいね数をランキング形式で表示します。
+・レーダーチャートの表示
+楽曲の数値を基にレーダーチャートで表示します。
+
 ## ディレクトリの大まかな説明
 ・音楽診断用プログラム  
 「音楽診断用データ.ipynb」と「spotify_apiの分析.ipynb」があり、それぞれ楽曲のデータを取得したり、分析したりするのに使用しました。  
-楽曲データはSpotifyのAPIを用いて取得しました。
+楽曲データはSpotifyのAPIを用いて取得しました。  
 ・html, css  
-webページを表示するために使用したhtmlとcssのファイルがあります。
+webページを表示するために使用したhtmlとcssのファイルがあります。  
 ・music_data  
 SpotifyのAPIを用いて取得した楽曲データが入っています。  
-ここでは、「洋楽」「邦楽」「ボカロ」の3種類のデータがあります。
+ここでは、「洋楽」「邦楽」「ボカロ」の3種類のデータがあります。  
 ・Lambda_function.ipynb  
 バックエンドでの処理を行うのに使用したLambda関数をまとめたファイルです。
 
 ## webアプリケーションの技術的な内容
-1. Webページはhtml,css,javascriptで記述しました。
-2. Webアプリケーションフレームワークは、flaskを使用しました。
-3. デプロイはherokuにて行いました。
+1. フロントエンドの処理  
+html,css,javascriptで記述しました。  
+ajax通信を用いてLambdaを処理するAPIを実行しました。これにより、データのやりとりを実現しています。  
+2. バックエンドの処理  
+AWSのdynamoDBに音楽データを格納し、Lambdaを用いてデータの処理を行っています。  
+3. 全体的な構造  
+s3にhtml,cssを入れて、静的ホスティングを実現しています。  
+<img src="https://github.com/Taakun/M-diag_for_AWS/assets/106829693/8c12c559-9881-4e5a-be38-3f756e1d3851" width="500">
 
 ## pythonのバージョン
-Python 3.9.4
+Python 3.10.1
 
-# ローカルで実行する場合の実行方法
-windowsの場合はコマンドプロンプトにて、macの場合はターミナルにて  
-```
-python test.py
-```
-と実行する。  
-その後、127.0.0.1:5000にアクセスすれば、「M-diag」に繋がります。
-
-## 楽曲に関して
-楽曲に関しては、spotifyのapiから取得しています。
+## 取得した楽曲に関して
+spotifyのapiから取得した楽曲は以下の通りです。
 
 ・現状の楽曲数と取得したプレイリストの情報  
 <洋楽>  
@@ -63,8 +72,7 @@ https://open.spotify.com/playlist/7phdTgX9Bq19f1nqutnc6o?si=dc782acaab1c4ae8
 1. spotifyのapiの取得には、以下を参考  
 https://knowledge.insight-lab.co.jp/sisense/information/spotify_music_data_1
 
-2. herokuへのデプロイ方法は以下を参考  
-https://algorithm.joho.info/programming/python/flask-heroku/
-
-3. flaskについては以下を参考  
-https://yohei-a.hatenablog.jp/entry/20180503/1525366741
+2. AWSのLambdaを用いたdynamoDBの処理方法について、Lambdaをwebアプリで実行する方法については、以下を参考
+[AWS API GatewayとLambdaでDynamoDB操作](https://business.ntt-east.co.jp/content/cloudsolution/column-try-20.html)  
+[サーバレスな静的ウェブサイトをイチから作ってみた。その①](https://blog.denet.co.jp/serverless_web1/)  
+[【AWS】簡単なサーバーレスアプリケーションを構築する](https://zenn.dev/soshimiyamoto/articles/dcb51cbd5725e0)  
